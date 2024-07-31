@@ -7,40 +7,36 @@ from flask_babel import Babel
 
 
 class Config:
-        '''Config class'''
-
-            DEBUG = True
-                LANGUAGES = ["en", "fr"]
-                    BABEL_DEFAULT_LOCALE = "en"
-                        BABEL_DEFAULT_TIMEZONE = "UTC"
-
-
-                        app = Flask(__name__)
-                        app.config.from_object(Config)
-                        app.url_map.strict_slashes = False
-                        babel = Babel(app)
+    '''Config class'''
+    DEBUG = True
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
-                        @babel.localeselector
-                        def get_locale() -> str:
-                                """Retrieves the locale for a web page.
-
-                                    Returns:
-                                            str: best match
-                                                """
-                                                    return request.accept_languages.best_match(app.config['LANGUAGES'])
+app = Flask(__name__)
+app.config.from_object(Config)
+app.url_map.strict_slashes = False
+babel = Babel(app)
 
 
-                                                @app.route('/')
-                                                def index() -> str:
-                                                        '''default route
+@babel.localeselector
+def get_locale() -> str:
+    """Retrieves the locale for a web page.
+    Returns:
+    str: best match
+    """
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
-                                                            Returns:
-                                                                    html: homepage
-                                                                        '''
-                                                                            return render_template("2-index.html")
+
+@app.route('/')
+def index() -> str:
+    '''default route
+    Returns:
+    html: homepage
+    '''
+    return render_template("2-index.html")
 
 
-                                                                        if __name__ == "__main__":
-                                                                                app.run()
-
+if __name__ == "__main__":
+    app.run()
